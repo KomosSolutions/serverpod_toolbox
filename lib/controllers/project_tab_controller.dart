@@ -1,16 +1,16 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:filepicker_windows/filepicker_windows.dart';
-import 'package:filesystem_picker/filesystem_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:serverpod_toolbox/models/preferences.dart';
 import 'package:tint/tint.dart';
 
 import 'command_runner.dart';
 
+///
+/// Controller for the project tab
+///
 class ProjectTabController {
     late Preferences preferences;
     late CommandRunner commandRunner;
@@ -35,62 +35,62 @@ class ProjectTabController {
         }
     }
 
-    ///
-    /// Handles the project folder selection
-    ///
-    Future<void> handleProjectFolderSelector(BuildContext context, Function setStateCallback) async {
-        final selectedDirectory = await _getDirectoryPicker(context);
-        if (selectedDirectory != null) {
-            setStateCallback(() {
-                projectFolderPath = selectedDirectory;
-            });
-            await preferences.saveProjectDir(projectFolderPath);
-        }
-    }
+    // ///
+    // /// Handles the project folder selection
+    // ///
+    // Future<void> handleProjectFolderSelector(BuildContext context, Function setStateCallback) async {
+    //     final selectedDirectory = await _getDirectoryPicker(context);
+    //     if (selectedDirectory != null) {
+    //         setStateCallback(() {
+    //             projectFolderPath = selectedDirectory;
+    //         });
+    //         await preferences.saveProjectDir(projectFolderPath);
+    //     }
+    // }
 
     ///
     /// Directory picker selection
     ///
-    Future<String?> _getDirectoryPicker(BuildContext context) {
-        return (Platform.isWindows) ? _getDirectoryPathWindows() : _getDirectoryPathLinux(context);
-    }
+    // Future<String?> _getDirectoryPicker(BuildContext context) {
+    //     return (Platform.isWindows) ? _getDirectoryPathWindows() : _getDirectoryPathLinux(context);
+    // }
 
 
     ///
     /// Directory picker selection for Linux
     ///
-    Future<String?> _getDirectoryPathLinux(BuildContext context) async {
-        final result = await FilesystemPicker.open(
-            context: context,
-            //rootDirectory: Directory("/"), // Optional: Set initial directory
-            fsType: FilesystemType.folder, // Specify directory selection
-        );
-
-        if (result != null) {
-            return result; // This is the selected directory path
-        } else {
-            // Handle case where user cancels or there's an error
-            return null;
-        }
-    }
+    // Future<String?> _getDirectoryPathLinux(BuildContext context) async {
+    //     final result = await FilesystemPicker.open(
+    //         context: context,
+    //         //rootDirectory: Directory("/"), // Optional: Set initial directory
+    //         fsType: FilesystemType.folder, // Specify directory selection
+    //     );
+    //
+    //     if (result != null) {
+    //         return result; // This is the selected directory path
+    //     } else {
+    //         // Handle case where user cancels or there's an error
+    //         return null;
+    //     }
+    // }
 
     ///
     /// Directory picker selection for windows
     ///
-    Future<String?> _getDirectoryPathWindows() {
-        final Completer<String?> completer = Completer<String?>();
-        final directoryPicker = DirectoryPicker()..title = 'Select a directory';
-
-        Future.microtask(() {
-            final selectedDirectory = directoryPicker.getDirectory();
-            if (selectedDirectory != null) {
-                completer.complete(selectedDirectory.path);
-            } else {
-                completer.complete(null);
-            }
-        });
-        return completer.future;
-    }
+    // Future<String?> _getDirectoryPathWindows() {
+    //     final Completer<String?> completer = Completer<String?>();
+    //     final directoryPicker = DirectoryPicker()..title = 'Select a directory';
+    //
+    //     Future.microtask(() {
+    //         final selectedDirectory = directoryPicker.getDirectory();
+    //         if (selectedDirectory != null) {
+    //             completer.complete(selectedDirectory.path);
+    //         } else {
+    //             completer.complete(null);
+    //         }
+    //     });
+    //     return completer.future;
+    // }
 
     ///
     /// Adds text to the log area

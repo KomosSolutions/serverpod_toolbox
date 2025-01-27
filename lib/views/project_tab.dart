@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:serverpod_toolbox/controllers/project_tab_controller.dart';
+import 'package:serverpod_toolbox/widgets/project_management_dialog.dart';
 import 'package:serverpod_toolbox/widgets/command_row.dart';
 import 'package:serverpod_toolbox/widgets/default_button.dart';
 
@@ -26,6 +27,7 @@ class _ProjectTabState extends State<ProjectTab> {
     final _popupLogAreaScrollController = ScrollController();
     bool _isLoading = false;
     late Future<void> _loadPreferencesFuture;
+    String _currentProjectName = '';
 
     @override
     void initState() {
@@ -59,9 +61,14 @@ class _ProjectTabState extends State<ProjectTab> {
                     return Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                                 const SizedBox(height: 20),
+                                _buildProjectTitleText(context),
+                                const SizedBox(height: 20),
                                 _buildProjectFolderSelector(),
+                                const SizedBox(height: 20),
+                                _buildManageProjectsButton(context),
                                 Expanded(
                                     child: SingleChildScrollView(
                                         child: Column(
@@ -124,6 +131,40 @@ class _ProjectTabState extends State<ProjectTab> {
     }
 
     ///
+    /// Builds a formatted project title from the directory name
+    ///
+    Text _buildProjectTitleText(BuildContext context) {
+        String formattedProjectName = _currentProjectName
+            .replaceAll('_', ' ') // Replace underscores with spaces
+            .split(' ') // Split into words
+            .map((word) => word.isNotEmpty
+                    ? word[0].toUpperCase() + word.substring(1).toLowerCase() // Capitalize each word
+                    : word) // Handle empty strings
+            .join(' '); // Join words back with a space
+
+        return Text(formattedProjectName, style: Theme.of(context).textTheme.headlineLarge);
+    }
+
+    ///
+    /// Builds the "Manage Projects" button
+    ///
+    Widget _buildManageProjectsButton(BuildContext context) {
+        return DefaultButton(
+            text: 'Manage Projects',
+            onPressed: () async {
+                // Show the dialog when the button is pressed
+                await ProjectManagementDialog(
+                    context,
+                    preferences: _controller.preferences,
+                ).show(context);
+                _controller.projectFolderPath = await _controller.preferences.loadProjectDir() ?? "";
+                _currentProjectName = await _controller.preferences.getCurrentProjectName() ?? "";
+                setState(() {});
+            },
+        );
+    }
+
+    ///
     /// Builds the project folder text field and folder selector button
     ///
     SizedBox _buildProjectFolderSelector() {
@@ -137,7 +178,7 @@ class _ProjectTabState extends State<ProjectTab> {
                         child: TextField(
                             controller: TextEditingController(text: _controller.projectFolderPath),
                             decoration: const InputDecoration(
-                                labelText: 'Select Top Level Project folder',
+                                labelText: 'Top Level Project folder',
                                 border: OutlineInputBorder(),
                             ),
                             onChanged: (value) {
@@ -146,14 +187,14 @@ class _ProjectTabState extends State<ProjectTab> {
                         ),
                     ),
                     const SizedBox(width: 10),
-                    Flexible(
-                        flex: 1,  // Adjust the flex to make sure the button gets enough space
-                        child: DefaultButton(
-                            onPressed: () => _controller.handleProjectFolderSelector(context, setState),
-                            text: '...',
-                            isLoading: _isLoading,
-                        ),
-                    ),
+                    // Flexible(
+                    //     flex: 1, // Adjust the flex to make sure the button gets enough space
+                    //     child: DefaultButton(
+                    //         onPressed: () => _controller.handleProjectFolderSelector(context, setState),
+                    //         text: '...',
+                    //         isLoading: _isLoading,
+                    //     ),
+                    // ),
                 ],
             ),
         );
@@ -201,7 +242,8 @@ class _ProjectTabState extends State<ProjectTab> {
     CommandRow _buildServerpodGenerateRow() {
         return CommandRow(
             context: context,
-            label: "Generate model (model db classes) and end point code.\nNote: Run 'serverpod create-migration' (below) for any DB changes",
+            label:
+            "Generate model (model db classes) and end point code.\nNote: Run 'serverpod create-migration' (below) for any DB changes",
             commandText: serverpodGenerateTitle,
             onPlayPressed: () async {
                 _setLoading(true);
@@ -382,12 +424,9 @@ class _ProjectTabState extends State<ProjectTab> {
                         _showLogAreaPopup();
                     },
                     text: 'Log output',
-                    isLoading: false,
                 ),
                 const SizedBox(width: 10),
-                if (_isLoading)
-                const CircularProgressIndicator(),  // Show spinner when loading
-
+                if (_isLoading) const CircularProgressIndicator(), // Show spinner when loading
             ],
         );
     }

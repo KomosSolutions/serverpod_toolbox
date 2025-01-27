@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import '../themes/app_theme.dart';
@@ -14,8 +13,8 @@ class DefaultButton extends StatelessWidget {
     const DefaultButton({
         super.key,
         required this.text,
-        required this.isLoading,
         required this.onPressed,
+        this.isLoading = false,
     });
 
     @override
@@ -24,9 +23,9 @@ class DefaultButton extends StatelessWidget {
             onPressed: isLoading ? null : onPressed, // Disable button when loading
             style: isLoading
                 ? AppTheme.standardButtonStyle().copyWith(
-                backgroundColor: WidgetStateProperty.all(Colors.grey), // Grey out background
-                foregroundColor: WidgetStateProperty.all(Colors.white54) // Optional: Lighten text color
-            )
+                    backgroundColor: WidgetStateProperty.all(Colors.grey), // Grey out background
+                    foregroundColor: WidgetStateProperty.all(Colors.white54) // Optional: Lighten text color
+                )
                 : AppTheme.standardButtonStyle(),
             child: Text(text), // Always show the text
         );
