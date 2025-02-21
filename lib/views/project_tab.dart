@@ -27,7 +27,6 @@ class _ProjectTabState extends State<ProjectTab> {
     final _popupLogAreaScrollController = ScrollController();
     bool _isLoading = false;
     late Future<void> _loadPreferencesFuture;
-    String _currentProjectName = '';
 
     @override
     void initState() {
@@ -134,7 +133,7 @@ class _ProjectTabState extends State<ProjectTab> {
     /// Builds a formatted project title from the directory name
     ///
     Text _buildProjectTitleText(BuildContext context) {
-        String formattedProjectName = _currentProjectName
+        String formattedProjectName = _controller.currentProjectName
             .replaceAll('_', ' ') // Replace underscores with spaces
             .split(' ') // Split into words
             .map((word) => word.isNotEmpty
@@ -158,7 +157,7 @@ class _ProjectTabState extends State<ProjectTab> {
                     preferences: _controller.preferences,
                 ).show(context);
                 _controller.projectFolderPath = await _controller.preferences.loadProjectDir() ?? "";
-                _currentProjectName = await _controller.preferences.getCurrentProjectName() ?? "";
+                _controller.currentProjectName = await _controller.preferences.getCurrentProjectName() ?? "";
                 setState(() {});
             },
         );
@@ -182,19 +181,18 @@ class _ProjectTabState extends State<ProjectTab> {
                                 border: OutlineInputBorder(),
                             ),
                             onChanged: (value) {
-                                _controller.updateProjectFolder(value);
+                                String? projectName = _controller.updateProjectFolder(value);
+                                if (projectName!=null) {
+                                  _controller.currentProjectName=projectName;
+                                  setState(() {
+
+                                  });
+                                } else {
+                                    _controller.currentProjectName='';
+                                }
                             },
                         ),
                     ),
-                    const SizedBox(width: 10),
-                    // Flexible(
-                    //     flex: 1, // Adjust the flex to make sure the button gets enough space
-                    //     child: DefaultButton(
-                    //         onPressed: () => _controller.handleProjectFolderSelector(context, setState),
-                    //         text: '...',
-                    //         isLoading: _isLoading,
-                    //     ),
-                    // ),
                 ],
             ),
         );
@@ -400,7 +398,7 @@ class _ProjectTabState extends State<ProjectTab> {
     CommandRow _buildFixDartFormatterRow() {
         return CommandRow(
             context: context,
-            label: "Fix dart_format plugin for IntelliJ.",
+            label: "Activate/update dart_format for the DartFormat IDE plugin",
             commandText: CommandRunner.fixDartFormat,
             onPlayPressed: () async {
                 _setLoading(true);

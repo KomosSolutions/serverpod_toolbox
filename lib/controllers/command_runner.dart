@@ -30,9 +30,9 @@ class CommandRunner {
     CommandRunner(this.projectDir, this.logAppender);
 
     ///
-    /// Populates the directories
+    /// Sets up the project directory variables for each sub dir, for use when running commands
     ///
-    Future<void> populateFolders() async {
+    Future<void> setupDirectoryVariables() async {
         // remove all path separators from the end of the project directory
         while (projectDir.endsWith(Platform.pathSeparator)) {
             projectDir = projectDir.substring(0, projectDir.length - 1);

@@ -91,17 +91,22 @@ class ProjectManagementDialog {
             child: Container(
                 decoration: BoxDecoration(
                     border: Border.all(
-                        color: selectedProject == projectName
-                            ? Colors.blue // Set border color for selected item
-                            : Colors.black, // No border for non-selected items
-                        width: 1, // Border width
+                        color: selectedProject == projectName ? Colors.blue : Colors.black,
+                        width: 1,
                     ),
-                    borderRadius: BorderRadius.circular(8), // make the corners rounded
+                    borderRadius: BorderRadius.circular(8),
                 ),
                 child: ListTile(
-                    title: Text(projectName, style: TextStyle(fontWeight: FontWeight.bold)),
+                    title: Text(projectName, style: const TextStyle(fontWeight: FontWeight.bold)),
                     subtitle: Text(projectDir),
                     tileColor: selectedProject == projectName ? Colors.blue[100] : Colors.white,
+                    trailing: IconButton(
+                        icon: const Icon(Icons.delete),
+                        onPressed: () {
+                            preferences.clearProject(projectName);
+                            Navigator.of(context).pop();
+                        },
+                    ),
                     onTap: () {
                         preferences.setCurrentProjectName(projectName);
                         Navigator.of(context).pop();
@@ -110,7 +115,6 @@ class ProjectManagementDialog {
             ),
         );
     }
-
     ///
     /// Handles the project folder selection
     ///

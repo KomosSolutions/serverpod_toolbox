@@ -13,18 +13,25 @@ and providing easy access to essential commands.  Simplify the process of buildi
 ## Installation and Setup
 
 1. **Install the application:**  
-   [serverpod_toolbox_installer.exe](https://github.com/KomosSolutions/serverpod_toolbox/releases/download/v1.0/serverpod_toolbox_installer.exe)
+   Windows:
+        [serverpod_toolbox_installer.exe](https://github.com/KomosSolutions/serverpod_toolbox/releases/download/v1.0/serverpod_toolbox_installer.exe)
 
-2. **Set Project Folder:** Set the project to the top level serverpod folder.
+    Linux:
+        Open the project in your favourite IDE and run
+
+    Mac OS:
+        Open the project in your favourite IDE and run
+
+2. **Manage Projects:** Add a project and set the folder to the top level serverpod folder.
     
     **Supported Project Structure:**
     Your project should contain the standard serverpod folder structure:  
-    /project_name_flutter/  
-    /project_name_server/  
-    /project_name_client/  
-    /project_name_shared/ (optional)  
-    
-    Where 'project_name' is the name of your serverpod project
+    /*project_name*_flutter/  
+    /*project_name*_server/  
+    /*project_name*_client/  
+    /*project_name*_shared/ (optional)  
+
+   Where '*project_name*' is the name of your serverpod project
 
 3. Now just select the action you want to perform on your project by clicking the green 'play' icon next to the command.
    Not sure what the command does?  Click the info button next to it!

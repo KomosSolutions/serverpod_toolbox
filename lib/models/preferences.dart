@@ -25,11 +25,11 @@ class Preferences {
     }
 
     ///
-    /// Clear the current project name
+    /// Clear/delete the project preference name
     ///
-    Future<void> clearCurrentProjectName() async {
+    Future<void> clearProject(String projectName) async {
         final prefs = await SharedPreferences.getInstance();
-        await prefs.remove(_currentProjectKey);
+        await prefs.remove('${projectName}_projectDir');
     }
 
     ///

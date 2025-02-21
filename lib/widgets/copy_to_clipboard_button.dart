@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+///
+/// A button to copy the text to the clipboard
+///
 class CopyToClipboardButton extends StatelessWidget {
     final String textToCopy;
 

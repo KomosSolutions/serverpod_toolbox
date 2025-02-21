@@ -19,7 +19,6 @@ class ResizableLogOutput extends StatelessWidget {
                         color: Colors.white,
                     ),
                     child: ListView(
-
                         children: [
                             TextField(
                                 controller: logController,
