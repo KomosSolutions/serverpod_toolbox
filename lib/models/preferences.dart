@@ -70,4 +70,14 @@ class Preferences {
         return prefs.getString('${projectName}_projectDir');
     }
 
+   static Future<void> saveApiUrl(String apiUrl) async {
+        final SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('api_url', apiUrl);
+    }
+
+   static  Future<String> loadApiUrl() async {
+        final SharedPreferences prefs = await SharedPreferences.getInstance();
+        return prefs.getString('api_url')??'';
+    }
+
 }

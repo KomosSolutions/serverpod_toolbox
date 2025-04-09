@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:serverpod_toolbox/themes/app_theme.dart';
+import 'package:serverpod_toolbox/views/monitor_tab.dart';
 import 'package:serverpod_toolbox/views/project_tab.dart';
 
 ///
@@ -15,6 +16,7 @@ class ServerPodToolbox extends StatefulWidget {
 class ServerPodToolboxState extends State<ServerPodToolbox> {
     bool isDarkMode = false;
     late AppTheme currentTheme;
+    final int _numberOfTabs=2;
 
     @override
     void didChangeDependencies() {
@@ -28,7 +30,7 @@ class ServerPodToolboxState extends State<ServerPodToolbox> {
             title: "Serverpod Toolbox",
             theme: currentTheme.themeData,
             home: DefaultTabController(
-                length: 1,
+                length: _numberOfTabs,
                 child: Scaffold(
                     appBar: AppBar(
                         actions: [
@@ -42,6 +44,7 @@ class ServerPodToolboxState extends State<ServerPodToolbox> {
                             tabs: [
                                 Tab(text: 'Project'),
                                 //  Tab(text: 'User Admin- TBA'),
+                                Tab(text: 'Monitor'),
                             ],
                         ),
                     ),
@@ -49,6 +52,7 @@ class ServerPodToolboxState extends State<ServerPodToolbox> {
                         children: [
                             ProjectTab(),
                             //UserAdminTab(),
+                            MonitorTab(),
                         ],
                     ),
                 ),
