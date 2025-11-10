@@ -8,6 +8,7 @@ import 'package:serverpod_toolbox/widgets/default_button.dart';
 
 import '../controllers/command_runner.dart';
 import '../en.dart';
+import '../widgets/scrollable_area.dart';
 
 ///
 /// The project management tab
@@ -20,7 +21,7 @@ class ProjectTab extends StatefulWidget {
 }
 
 class _ProjectTabState extends State<ProjectTab> {
-    static const double defaultControlSpacing = 2;
+    static const double defaultControlSpacing = 0;
 
     late ProjectTabController _controller;
     final TextEditingController _popupLogController = TextEditingController();
@@ -41,7 +42,8 @@ class _ProjectTabState extends State<ProjectTab> {
 
         _controller = ProjectTabController(_popupLogController);
         _loadPreferencesFuture = _controller.loadPreferences();
-        setState(() {});
+        setState(() {
+            });
     }
 
     @override
@@ -58,22 +60,26 @@ class _ProjectTabState extends State<ProjectTab> {
                 } else {
                     // Future completed successfully, build form
                     return Padding(
-                        padding: const EdgeInsets.all(10.0),
+                        padding: const EdgeInsets.only(left: 10.0,right: 10.0),
                         child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                                const SizedBox(height: 20),
                                 _buildProjectTitleText(context),
-                                const SizedBox(height: 20),
-                                _buildProjectFolderSelector(),
-                                const SizedBox(height: 20),
-                                _buildManageProjectsButton(context),
+                                const SizedBox(height: 10),
+                                Row(
+                                    children: [
+                                        _buildProjectFolderSelector(),
+                                        const SizedBox(width: 10),
+                                        _buildManageProjectsButton(context),
+                                    ],
+                                ),
+                                buildDivider(),
                                 Expanded(
-                                    child: SingleChildScrollView(
+                                    child: ScrollableArea(
                                         child: Column(
                                             crossAxisAlignment: CrossAxisAlignment.center,
                                             children: [
-                                                const SizedBox(height: 20),
+                                                const SizedBox(height: 10),
                                                 Text("Serverpod Commands", style: Theme.of(context).textTheme.headlineSmall),
                                                 Container(
                                                     margin: const EdgeInsets.symmetric(vertical: 4.0),
@@ -122,6 +128,7 @@ class _ProjectTabState extends State<ProjectTab> {
                                 ),
                                 //   _buildClearLogButton(),
                                 _buildLogButton(),
+                                const SizedBox(height: 10),
                             ],
                         ),
                     );
@@ -156,9 +163,9 @@ class _ProjectTabState extends State<ProjectTab> {
                     context,
                     preferences: _controller.preferences,
                 ).show(context);
-                _controller.projectFolderPath = await _controller.preferences.loadProjectDir() ?? "";
-                _controller.currentProjectName = await _controller.preferences.getCurrentProjectName() ?? "";
-                setState(() {});
+                await _controller.loadPreferences();
+                setState(() {
+                    });
             },
         );
     }
@@ -166,9 +173,9 @@ class _ProjectTabState extends State<ProjectTab> {
     ///
     /// Builds the project folder text field and folder selector button
     ///
-    SizedBox _buildProjectFolderSelector() {
-        return SizedBox(
-            width: 1200,
+    Widget _buildProjectFolderSelector() {
+        return Expanded(
+          //  width: 500,
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -182,13 +189,12 @@ class _ProjectTabState extends State<ProjectTab> {
                             ),
                             onChanged: (value) {
                                 String? projectName = _controller.updateProjectFolder(value);
-                                if (projectName!=null) {
-                                  _controller.currentProjectName=projectName;
-                                  setState(() {
-
-                                  });
+                                if (projectName != null) {
+                                    _controller.currentProjectName = projectName;
+                                    setState(() {
+                                        });
                                 } else {
-                                    _controller.currentProjectName='';
+                                    _controller.currentProjectName = '';
                                 }
                             },
                         ),

@@ -80,4 +80,13 @@ class Preferences {
         return prefs.getString('api_url')??'';
     }
 
+   static Future<void> saveApiUrlPrefix(String prefix) async {
+        final SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('api_url_prefix', prefix);
+    }
+
+   static  Future<String> loadApiUrlPrefix() async {
+        final SharedPreferences prefs = await SharedPreferences.getInstance();
+        return prefs.getString('api_url_prefix')??'';
+    }
 }

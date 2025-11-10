@@ -37,7 +37,7 @@ class ServerPodToolboxState extends State<ServerPodToolbox> {
                             _buildThemeSwitch(),
                         ],
                         title: const Text(
-                            'Serverpod Toolbox - A set of tools for managing a serverpod project',
+                            'Serverpod Toolbox - Tools for managing serverpod projects',
                             overflow: TextOverflow.ellipsis,
                         ),
                         bottom: const TabBar(
@@ -74,7 +74,7 @@ class ServerPodToolboxState extends State<ServerPodToolbox> {
                 Switch(
                     value: isDarkMode,
                     onChanged: toggleTheme,
-                    activeColor: Colors.white,
+                    activeThumbColor: Colors.white,
                     activeTrackColor: Colors.blueAccent,
                     inactiveTrackColor: Colors.grey,
                     inactiveThumbColor: Colors.white,
